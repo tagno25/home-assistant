@@ -18,7 +18,7 @@ from requests.exceptions import HTTPError
 
 DOMAIN = 'sleepiq'
 
-REQUIREMENTS = ['sleepyq==0.6']
+REQUIREMENTS = ['sleepyq==0.7']
 
 MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=30)
 
