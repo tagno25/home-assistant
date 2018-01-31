@@ -4,8 +4,12 @@ Support for SleepIQ sensors.
 For more details about this platform, please refer to the documentation at
 https://home-assistant.io/components/binary_sensor.sleepiq/
 """
+import logging
+
 from homeassistant.components import sleepiq
 from homeassistant.components.binary_sensor import BinarySensorDevice
+
+_LOGGER = logging.getLogger(__name__)
 
 DEPENDENCIES = ['sleepiq']
 
@@ -21,7 +25,8 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
     dev = list()
     for bed_id, _ in data.beds.items():
         for side in sleepiq.SIDES:
-            dev.append(IsInBedBinarySensor(data, bed_id, side))
+            if type(IsInBedBinarySensor(data, bed_id, side).name) != type(None):
+                dev.append(IsInBedBinarySensor(data, bed_id, side))
     add_devices(dev)
 
 
@@ -49,4 +54,5 @@ class IsInBedBinarySensor(sleepiq.SleepIQSensor, BinarySensorDevice):
     def update(self):
         """Get the latest data from SleepIQ and updates the states."""
         sleepiq.SleepIQSensor.update(self)
-        self._state = self.side.is_in_bed
+        if type(self.side) != type(None):
+            self._state = self.side.is_in_bed
